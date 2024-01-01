@@ -1,1 +1,9 @@
 node_modules
+TaskManager Logical Model.txt
+Setting Up Express Project.txt
+privatekey.pem
+.env
+dist/datasource.js 
+dist/datasource.js.map
+ormconfig.json 
+src/datasource.ts 
