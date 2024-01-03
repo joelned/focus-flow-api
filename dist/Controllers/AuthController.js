@@ -7,11 +7,13 @@ const authRouter = Router();
 const app = express();
 const repository = AppDataSource.getRepository(User);
 app.use(express.json());
-authRouter.post("/add-user", async (req, res) => {
-    const { username, password } = req.body;
+authRouter.post("/signup", async (req, res) => {
+    const newUser = {
+        username: req.body.username,
+        password: req.body.password
+    };
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User(username, hashedPassword);
+        const hashedPassword = await bcrypt.hash(newUser.password, 10);
         await repository.save(newUser);
         res.status(201).json("New User Added");
     }
@@ -21,27 +23,33 @@ authRouter.post("/add-user", async (req, res) => {
     }
 });
 authRouter.post("/login", async (req, res) => {
-    const User = {
-        username: req.body.username,
-        password: req.body.password
-    };
-    const existingCustomer = await repository.findOne({
-        where: {
-            username: User.username
-        }
-    });
-    if (existingCustomer) {
-        const isMatched = await bcrypt.compare(User.password, existingCustomer.password);
-        if (isMatched) {
-            const token = createjwt({ id: existingCustomer.userId });
-            res.status(200).json({ message: "Login Successful", accessToken: token });
+    try {
+        const User = {
+            username: req.body.username,
+            password: req.body.password
+        };
+        const existingCustomer = await repository.findOne({
+            where: {
+                username: User.username
+            }
+        });
+        if (existingCustomer) {
+            const isMatched = await bcrypt.compare(User.password, existingCustomer.password);
+            if (isMatched) {
+                const token = createjwt({ id: existingCustomer.userId });
+                res.status(200).json({ message: "Login Successful", accessToken: token });
+            }
+            else {
+                res.status(401).json("Invalid Credentials");
+            }
         }
         else {
             res.status(401).json("Invalid Credentials");
         }
     }
-    else {
-        res.status(401).json("Invalid Credentials");
+    catch (error) {
+        console.log(error);
+        res.status(500).json("Internal Server Error");
     }
 });
 export default authRouter;

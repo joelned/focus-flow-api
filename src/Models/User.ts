@@ -1,21 +1,23 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany} from "typeorm"
-import { Task } from "./Task.js"
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm"
+import { Task } from "./Task.js";
+
+
 
 @Entity()
 export class User{
     @PrimaryGeneratedColumn()
-    userId: number 
+    userId: number;
     
     @Column({type: 'varchar'})
-    username: string 
+    username: string;
 
     @Column({type: 'varchar'}) 
-    password: string 
-    
-     constructor(username: string, password: string){
-        this.username = username, 
-        this.password= password
+    password: string;
 
-    }
+   @OneToMany(()=> Task, (task)=>task.user)
+   tasks: Task[]
+   
+
+   
 }
-export default User
+export default User;

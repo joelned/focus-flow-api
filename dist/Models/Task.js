@@ -7,12 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn } from "typeorm";
+import { User } from "./User.js";
 let Task = class Task {
-    constructor(taskName, description) {
-        this.taskName = taskName,
-            this.description = description;
-    }
 };
 __decorate([
     PrimaryGeneratedColumn(),
@@ -26,9 +23,17 @@ __decorate([
     Column({ type: 'varchar' }),
     __metadata("design:type", String)
 ], Task.prototype, "description", void 0);
+__decorate([
+    CreateDateColumn({ type: 'datetime' }),
+    __metadata("design:type", Date)
+], Task.prototype, "dateCreated", void 0);
+__decorate([
+    ManyToOne(() => User, user => user.tasks),
+    __metadata("design:type", User)
+], Task.prototype, "user", void 0);
 Task = __decorate([
-    Entity(),
-    __metadata("design:paramtypes", [String, String])
+    Entity()
 ], Task);
 export { Task };
+export default Task;
 //# sourceMappingURL=Task.js.map

@@ -7,12 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Task } from "./Task.js";
+import { Category } from "./Category.js";
 let User = class User {
-    constructor(username, password) {
-        this.username = username,
-            this.password = password;
-    }
 };
 __decorate([
     PrimaryGeneratedColumn(),
@@ -26,9 +24,16 @@ __decorate([
     Column({ type: 'varchar' }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    OneToMany(() => Task, (task) => task.user),
+    __metadata("design:type", Array)
+], User.prototype, "tasks", void 0);
+__decorate([
+    OneToMany(() => Category, (category) => category.user),
+    __metadata("design:type", Category)
+], User.prototype, "category", void 0);
 User = __decorate([
-    Entity(),
-    __metadata("design:paramtypes", [String, String])
+    Entity()
 ], User);
 export { User };
 export default User;

@@ -7,11 +7,13 @@ const taskRouter = Router();
 const repository = AppDataSource.getRepository(Task);
 app.use(express.json());
 taskRouter.post("/add-task", verifyjwt, async (req, res) => {
-    const { taskName, description } = req.body;
+    const newTask = {
+        taskName: req.body.taskName,
+        description: req.body.description
+    };
     try {
-        const newTask = new Task(taskName, description);
         const repository = AppDataSource.getRepository(Task);
-        repository.save(newTask);
+        await repository.save(newTask);
         res.status(201).json("New Task Added");
     }
     catch (error) {
@@ -19,7 +21,7 @@ taskRouter.post("/add-task", verifyjwt, async (req, res) => {
         res.status(500).json("Internal Server Error");
     }
 });
-taskRouter.get("/tasks", verifyjwt, async (req, res) => {
+taskRouter.get("/", verifyjwt, async (req, res) => {
     const products = await repository.find();
     try {
         res.status(200).send(products);

@@ -7,9 +7,10 @@
         "sourceMap": true, 
         "outDir": "dist",
         "experimentalDecorators": true,
+        "rootDir": "./src"
 
     }, 
-    "include": ["src/**/*", "global.d.ts"],
+    "include": ["src/**/*"],
        
 
 

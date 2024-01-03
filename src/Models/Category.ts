@@ -1,6 +1,6 @@
-import e from "express"
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany} from "typeorm"
-import { Task} from "./Task.js"
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne, JoinColumn} from "typeorm"
+
+
 
 @Entity()
 export class Category{
@@ -10,6 +10,6 @@ export class Category{
     @Column({type: 'varchar'})
     name: string 
 
-   
+
 
 }

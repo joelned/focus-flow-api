@@ -12,11 +12,13 @@ const repository = AppDataSource.getRepository(User)
 app.use(express.json())
 
 authRouter.post("/signup", async(req: Request, res:Response)=>{
-    const {username, password} = req.body
+    const newUser ={
+        username: req.body.username, 
+        password: req.body.password
+    }
 
     try{
-        const hashedPassword = await bcrypt.hash(password,10);
-        const newUser = new User(username, hashedPassword);
+        const hashedPassword = await bcrypt.hash(newUser.password,10);
         await repository.save(newUser);
         res.status(201).json("New User Added");
     }

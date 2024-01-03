@@ -1,10 +1,9 @@
-import {Entity, PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn}from "typeorm"
-import {Category} from "./Category.js"
+import {Entity, PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn, OneToOne}from "typeorm"
 import { User } from "./User.js"
-
 
 @Entity()
 export class Task{
+   
     @PrimaryGeneratedColumn()
     taskId: number
 
@@ -14,8 +13,13 @@ export class Task{
     @Column({type: 'varchar'})
     description: string
 
-    constructor(taskName: string, description: string){
-        this.taskName = taskName, 
-        this.description = description
-    }
+    @CreateDateColumn({type: 'datetime'})
+    dateCreated: Date
+
+    @Column({type: 'boolean'})
+    status:Boolean
+    @ManyToOne(()=>User, user=> user.tasks)
+    user: User
+
 }
+export default Task;
