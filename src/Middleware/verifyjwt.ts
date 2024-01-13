@@ -24,6 +24,7 @@ export function verifyjwt(req: Request, res:Response, next: NextFunction){
     if(!token){
         res.status(401).json("Unauthorized Access");
     }
+
     else{
         try{
             const decodedToken = jwt.verify(token, secret_key) as DecodedToken;

@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { Task } from "./Task.js";
-import { Category } from "./Category.js";
 let User = class User {
 };
 __decorate([
@@ -28,10 +27,6 @@ __decorate([
     OneToMany(() => Task, (task) => task.user),
     __metadata("design:type", Array)
 ], User.prototype, "tasks", void 0);
-__decorate([
-    OneToMany(() => Category, (category) => category.user),
-    __metadata("design:type", Category)
-], User.prototype, "category", void 0);
 User = __decorate([
     Entity()
 ], User);

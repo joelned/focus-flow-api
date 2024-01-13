@@ -7,8 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { User } from "./User.js";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 let Category = class Category {
 };
 __decorate([
@@ -19,10 +18,6 @@ __decorate([
     Column({ type: 'varchar' }),
     __metadata("design:type", String)
 ], Category.prototype, "name", void 0);
-__decorate([
-    ManyToOne(() => User, (user) => user.category),
-    __metadata("design:type", User)
-], Category.prototype, "user", void 0);
 Category = __decorate([
     Entity()
 ], Category);

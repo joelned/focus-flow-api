@@ -28,6 +28,10 @@ __decorate([
     __metadata("design:type", Date)
 ], Task.prototype, "dateCreated", void 0);
 __decorate([
+    Column({ type: 'boolean' }),
+    __metadata("design:type", Boolean)
+], Task.prototype, "status", void 0);
+__decorate([
     ManyToOne(() => User, user => user.tasks),
     __metadata("design:type", User)
 ], Task.prototype, "user", void 0);

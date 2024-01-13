@@ -2,20 +2,19 @@ import express, {Request, Response, Router} from "express";
 import { AppDataSource } from "../datasource.js";
 import { Task } from "../Models/Task.js";
 import { verifyjwt } from "../Middleware/verifyjwt.js";
-import { todo } from "node:test";
 
 
 const app = express();
 const taskRouter = Router();
 const repository = AppDataSource.getRepository(Task);
-app.use(express.json())
+app.use(express.json());
 
 taskRouter.post("/add-task", verifyjwt, async (req:Request, res:Response)=>{
-    const newTask ={
-       taskName: req.body.taskName, 
-       description: req.body.description
-    }
     try{
+        const newTask ={
+            taskName: req.body.taskName, 
+            description: req.body.description
+         }
         const repository= AppDataSource.getRepository(Task);
         await repository.save(newTask);
         res.status(201).json("New Task Added");
@@ -27,8 +26,9 @@ taskRouter.post("/add-task", verifyjwt, async (req:Request, res:Response)=>{
 })
 
 taskRouter.get("/", verifyjwt, async(req: Request, res: Response)=>{
-    const products = await repository.find();
+    
     try{
+        const products = await repository.find();
         res.status(200).send(products);
     }
     catch(error){
@@ -37,14 +37,14 @@ taskRouter.get("/", verifyjwt, async(req: Request, res: Response)=>{
     }
 })
 
-taskRouter.put("/mark-done/:Id", async (req: Request, res:Response)=>{
-    const Task={
-        id: Number 
-    };
-    const task = Number(req.params.Id)
+taskRouter.get("/:Id", verifyjwt, async (req: Request, res:Response)=>{
 
     try{
-          const isPresent = repository.findOne(
+        const Task={
+            id: Number 
+        };
+        const task = Number(req.params.Id);
+          const isPresent = await repository.findOne(
             {
                 where:{
                     taskId: task
@@ -62,5 +62,29 @@ taskRouter.put("/mark-done/:Id", async (req: Request, res:Response)=>{
         console.log(error); 
     }
 
+})
+taskRouter.delete("/:Id", verifyjwt, async (req:Request, res:Response)=> {
+    const inputedId = Number(req.params.Id); 
+    try{
+
+        const isPresent = await repository.findOne(
+            {
+                where: {
+                    taskId: inputedId
+                }
+            }
+        )
+        if(isPresent){
+        await repository.remove(isPresent);
+        res.json("Task Deleted Successfully");
+        }
+        else{
+            res.status(404).json("Task not found");
+        }
+    }
+    catch(error){
+        console.log(error);
+    }
+  
 })
 export default taskRouter;

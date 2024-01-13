@@ -8,14 +8,25 @@ const app = express();
 const repository = AppDataSource.getRepository(User);
 app.use(express.json());
 authRouter.post("/signup", async (req, res) => {
-    const newUser = {
-        username: req.body.username,
-        password: req.body.password
-    };
     try {
-        const hashedPassword = await bcrypt.hash(newUser.password, 10);
-        await repository.save(newUser);
-        res.status(201).json("New User Added");
+        const newUser = {
+            username: req.body.username,
+            password: req.body.password
+        };
+        const isPresent = await repository.findOne({
+            where: {
+                username: newUser.username
+            }
+        });
+        if (isPresent) {
+            return res.status(409).send("Username already taken");
+        }
+        else {
+            const hashedPassword = await bcrypt.hash(newUser.password, 10);
+            newUser.password = hashedPassword;
+            await repository.save(newUser);
+            res.status(201).json("New User Added");
+        }
     }
     catch (error) {
         console.error("Error creating user: " + error);

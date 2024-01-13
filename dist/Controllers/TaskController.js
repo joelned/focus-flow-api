@@ -31,5 +31,47 @@ taskRouter.get("/", verifyjwt, async (req, res) => {
         res.status(500).json("Internal Server Error");
     }
 });
+taskRouter.get("/:Id", verifyjwt, async (req, res) => {
+    const Task = {
+        id: Number
+    };
+    const task = Number(req.params.Id);
+    try {
+        const isPresent = await repository.findOne({
+            where: {
+                taskId: task
+            }
+        });
+        if (isPresent) {
+            res.status(200).json(isPresent);
+        }
+        else {
+            res.status(404).json("Task Not Found");
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+taskRouter.delete("/:Id", verifyjwt, async (req, res) => {
+    const inputedId = Number(req.params.Id);
+    try {
+        const isPresent = await repository.findOne({
+            where: {
+                taskId: inputedId
+            }
+        });
+        if (isPresent) {
+            repository.remove(isPresent);
+            res.json("Task Deleted Successfully");
+        }
+        else {
+            res.status(404).json("Task not found");
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
 export default taskRouter;
 //# sourceMappingURL=TaskController.js.map
